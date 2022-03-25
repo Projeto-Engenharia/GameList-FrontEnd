@@ -1,11 +1,14 @@
 import React from 'react';
 import { ChakraProvider } from '@chakra-ui/react';
 
+import { theme } from '../styles/theme';
+import Auth from './Auth';
+
 
 function App() {
   return (
-    <ChakraProvider>
-      <h1>Hello Mundo!</h1>
+    <ChakraProvider theme={theme}>
+      <Auth />
     </ChakraProvider>
   );
 }
