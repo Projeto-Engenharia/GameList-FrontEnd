@@ -16,7 +16,7 @@ const InputBase = ({ name, label, ...rest }: InputProps) => {
 
 
     return (
-        <FormControl>
+        <FormControl mt="0.5rem">
             {!!label && <FormLabel _focus={{ color: "blue.500"}}  fontWeight="bold" m="0" htmlFor={name}>{label}</FormLabel>}
 
             <ChakraInput
