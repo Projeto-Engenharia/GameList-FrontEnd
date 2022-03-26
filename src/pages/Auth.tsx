@@ -1,6 +1,7 @@
 import React from "react";
 import {
     Box,
+    Button,
     Flex,
     Image,
     Stack,
@@ -37,10 +38,11 @@ export default function Auth() {
                         <Text color="white">Already a member? </Text>
                         <Text color="blue.500">&nbsp;Log In</Text>
                     </Flex>
-                    <Stack mt="4.5rem">
-                        <Input name="Nick" label="Nick"/>
-                        <Input name="Password" label="Password" />
-                    </Stack>
+                    <Flex mt="4.5rem" direction="column">
+                        <Input name="Nick" label="Nick" />
+                        <Input  name="Password" label="Password" type="password" />
+                        <Button mt="20px" bgColor="blue.500" type="submit" >Sign In</Button>
+                    </Flex>
                 </Flex>
             </Flex>
         </Flex>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     FormControl,
     FormLabel,
@@ -14,13 +14,20 @@ interface InputProps extends ChakraInputProps {
 
 const InputBase = ({ name, label, ...rest }: InputProps) => {
 
+
     return (
         <FormControl>
-            {!!label && <FormLabel fontWeight="bold" m="0" htmlFor={name}>{label}</FormLabel>}
+            {!!label && <FormLabel _focus={{ color: "blue.500"}}  fontWeight="bold" m="0" htmlFor={name}>{label}</FormLabel>}
 
-            <ChakraInput 
-                name={name}
+            <ChakraInput
+                bgColor="gray.700"
+                borderColor="gray.700"
+                name={name} 
                 id={name}
+                _hover={{
+                    borderColor: "blue.500"
+                }}
+                {...rest}
             />
         </FormControl>
     )
