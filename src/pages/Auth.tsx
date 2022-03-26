@@ -3,9 +3,11 @@ import {
     Box,
     Flex,
     Image,
+    Stack,
     Text
 } from "@chakra-ui/react";
 
+import { Input } from '../components/InputAuth';
 import imgAuthHorizon from '../assets/HorizonImg.png';
 
 export default function Auth() {
@@ -25,14 +27,20 @@ export default function Auth() {
                 px={100}
                 py={100}
             >
-                <Text fontWeight="bold" color="gray.500">Start for free</Text>
-                <Flex>
-                    <Text m="0" fontSize={44} fontWeight="bold" color="white">Create new account</Text>
-                    <Text m="0" fontSize={44} fontWeight="bold" color="blue.500">.</Text>
-                </Flex>
-                <Flex>
-                    <Text color="white">Already a member? </Text>
-                    <Text color="blue.500">&nbsp;Log In</Text>
+                <Flex direction="column" w="40%">
+                    <Text fontWeight="bold" color="gray.500">Start for free</Text>
+                    <Flex>
+                        <Text m="0" fontSize={44} fontWeight="bold" color="white">Create new account</Text>
+                        <Text m="0" fontSize={44} fontWeight="bold" color="blue.500">.</Text>
+                    </Flex>
+                    <Flex>
+                        <Text color="white">Already a member? </Text>
+                        <Text color="blue.500">&nbsp;Log In</Text>
+                    </Flex>
+                    <Stack mt="4.5rem">
+                        <Input name="Nick" label="Nick"/>
+                        <Input name="Password" label="Password" />
+                    </Stack>
                 </Flex>
             </Flex>
         </Flex>
