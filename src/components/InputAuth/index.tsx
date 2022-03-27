@@ -24,6 +24,7 @@ const InputBase = ({ name, label, ...rest }: InputProps) => {
                 borderColor="gray.700"
                 name={name} 
                 id={name}
+                size="lg"
                 _hover={{
                     borderColor: "blue.500"
                 }}

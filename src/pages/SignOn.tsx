@@ -21,7 +21,7 @@ export default function Auth() {
             <Box width="100%"
                 h="100%"
                 position="fixed"
-                bgGradient="linear(to-r, #282A37 0%, rgba(40, 42, 55, 0.57) 98.78%)"
+                bgGradient="linear(to-r, #282A37 30%, rgba(40, 42, 55, 0.57) 98.78%)"
                 zIndex={0}
             />
             <Flex
@@ -36,7 +36,7 @@ export default function Auth() {
                 </Flex>
                     <Image src={LogoIcon} w="100px" h="23px" />
                 <Flex>
-                    <Flex minWidth="35%" direction="column">
+                    <Flex minWidth="40%" direction="column">
                         <Text mt="2.5rem"fontWeight="bold" color="gray.500">Start for free</Text>
                         <Flex>
                             <Text m="0" fontSize={44} fontWeight="bold" color="white">Create new account</Text>
@@ -46,16 +46,15 @@ export default function Auth() {
                             <Text color="white">Already a member? </Text>
                             <Text color="blue.500">&nbsp;Log In</Text>
                         </Flex>
-                        <Flex mt="2.5rem" direction="column">
+                        <Flex mt="4.5rem" direction="column">
                             <Input name="nick" label="Nick" />
-                            <Input name="email" label="Email" />
                             <Input name="password" label="Password" type="password" />
-                            <Button size="lg" mt="20px" bgColor="blue.500" type="submit" _hover={{ bgColor: "blue.700" }} >Create Account</Button>
+                            <Button mt="20px" bgColor="blue.500" type="submit" _hover={{ bgColor: "blue.700" }} >Sign In</Button>
                         </Flex>
                     </Flex>
                     <Flex ml="20%" mt="2.5rem" direction="column">
                         <Text fontWeight="bold" fontSize="4xl">Half-Life 2</Text>
-                        <Text fontSize="2xl" fontWeight="medium">“The right man in the wrong place can make all the difference in the world."</Text>
+                        <Text fontSize="2xl" fontWeight="light">“The right man in the wrong place can make all the difference in the world."</Text>
                     </Flex>
                 </Flex>
             </Flex>
