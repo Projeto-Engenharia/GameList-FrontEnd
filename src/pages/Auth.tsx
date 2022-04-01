@@ -6,7 +6,8 @@ import {
     Image,
     Stack,
     Text,
-    Link
+    Link,
+    useToast
 } from "@chakra-ui/react";
 import { FiUser, FiEye, FiMail } from 'react-icons/fi';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
@@ -14,7 +15,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 
 import { Input } from '../components/InputAuth';
-import imgAuthHorizon from '../assets/HorizonImg.png';
+import imgGodOFWar from '../assets/GodOFWar.jpg';
 import LogoIcon from '../assets/LogoIcon.svg';
 import api from "../api/api";
 
@@ -31,9 +32,30 @@ const schema = yup.object({
 }).required()
 
 export default function Auth() {
+    const toast = useToast();
 
-    function createUser(data: any) {
-        api.post('/createUser', data);
+    async function createUser(data: any) {
+
+
+            try {
+                const response = await api.post('/createUser', data);
+                return toast({
+                    title: 'Account created.',
+                    description: "We've created your account for you.",
+                    status: 'success',
+                    duration: 2000,
+                    isClosable: true,
+                  })
+            } catch (error) {
+                return toast({
+                    title: 'Error.',
+                    description: "Already Created",
+                    status: 'error',
+                    duration: 2000,
+                    isClosable: true,
+                  })
+            }
+           
     }
 
     const { control, handleSubmit, formState } = useForm<ISignIn>({
@@ -44,7 +66,7 @@ export default function Auth() {
 
     return (
         <Flex w="100%" h="100vh" overflow="hidden" position="absolute">
-            <Image src={imgAuthHorizon} w="100%" h="100%" position="fixed" zIndex={-1} alt="horizon wallpaper" />
+            <Image src={imgGodOFWar} w="100%" h="100%" position="fixed" zIndex={-1} alt="horizon wallpaper" />
             <Box width="100%"
                 h="100%"
                 position="fixed"
@@ -71,7 +93,7 @@ export default function Auth() {
                         </Flex>
                         <Flex>
                             <Text color="white">Already a member? </Text>
-                            <Link fontWeight="bold" color="blue.500">&nbsp;Log In</Link>
+                            <Link href="/signUp" fontWeight="bold" color="blue.500">&nbsp;Log In</Link>
                         </Flex>
                         <Flex as="form" onSubmit={handleSubmit(handleCreateAccount)} mt="2.5rem" direction="column">
                             <Stack>
