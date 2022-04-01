@@ -6,14 +6,17 @@ import {
     Image,
     Stack,
     Text,
-    Icon
+    Link
 } from "@chakra-ui/react";
 import { FiUser, FiEye, FiMail } from 'react-icons/fi';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from "yup";
 
 import { Input } from '../components/InputAuth';
 import imgAuthHorizon from '../assets/HorizonImg.png';
 import LogoIcon from '../assets/LogoIcon.svg';
+import api from "../api/api";
 
 type ISignIn = {
     nick: string;
@@ -21,11 +24,23 @@ type ISignIn = {
     password: string;
 }
 
+const schema = yup.object({
+    nick: yup.string().required(),
+    email: yup.string().email().required(),
+    password: yup.string().required()
+}).required()
+
 export default function Auth() {
 
-    const { register, control ,handleSubmit, formState } = useForm<ISignIn>();
+    function createUser(data: any) {
+        api.post('/createUser', data);
+    }
+
+    const { control, handleSubmit, formState } = useForm<ISignIn>({
+        resolver: yupResolver(schema)
+    });
     const { errors } = formState;
-    const handleCreateAccount: SubmitHandler<ISignIn> = async (data: ISignIn) => await console.log(data);
+    const handleCreateAccount: SubmitHandler<ISignIn> = async (data: ISignIn) => createUser(data);
 
     return (
         <Flex w="100%" h="100vh" overflow="hidden" position="absolute">
@@ -56,7 +71,7 @@ export default function Auth() {
                         </Flex>
                         <Flex>
                             <Text color="white">Already a member? </Text>
-                            <Text color="blue.500">&nbsp;Log In</Text>
+                            <Link fontWeight="bold" color="blue.500">&nbsp;Log In</Link>
                         </Flex>
                         <Flex as="form" onSubmit={handleSubmit(handleCreateAccount)} mt="2.5rem" direction="column">
                             <Stack>
@@ -64,19 +79,19 @@ export default function Auth() {
                                     name="nick"
                                     control={control}
                                     defaultValue=""
-                                    render={({ field }) => <Input label="Nick" icon={FiUser} {...field} /> }
+                                    render={({ field }) => <Input label="Nick" icon={FiUser} error={errors.nick} {...field} />}
                                 />
                                 <Controller
                                     name="email"
                                     control={control}
                                     defaultValue=""
-                                    render={({ field }) => <Input label="Email" icon={FiMail} {...field} /> }
+                                    render={({ field }) => <Input label="Email" icon={FiMail} error={errors.email} {...field} />}
                                 />
                                 <Controller
                                     name="password"
                                     control={control}
                                     defaultValue=""
-                                    render={({ field }) => <Input label="Password" type="password" icon={FiEye} {...field} /> }
+                                    render={({ field }) => <Input label="Password" type="password" icon={FiEye} error={errors.password} {...field} />}
                                 />
                             </Stack>
                             <Button type="submit" size="lg" mt="20px" bgColor="blue.500" _hover={{ bgColor: "blue.700" }}>Create Account</Button>
