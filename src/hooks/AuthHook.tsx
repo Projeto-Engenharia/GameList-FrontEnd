@@ -19,6 +19,22 @@ type AuthContextType = {
     signOut: () => Promise<void>;
 }
 
+interface IUser {
+    id: string,
+    nome: string,
+    senha: string,
+    games: [
+      {
+        id: string,
+        nome: string,
+        senha: string,
+        descricao: string,
+        avaliacao: 0,
+        image: string
+      }
+    ]
+  }
+
 export const AuthContext = createContext({} as AuthContextType)
 
 export function AuthProvider({ children }: any) {
@@ -38,12 +54,15 @@ export function AuthProvider({ children }: any) {
 
     async function signIn({ nick, password }: SignInData) {
         try {
-            const response = await api.post('/signIn', {
-                nick,
-                password
-            })
+            const response = await api.get<IUser[]>('/api/Users');
             
-            localStorage.setItem('GameList@user', JSON.stringify(response.data));
+            const user = response.data.find(user => user.nome === nick && user.senha === password);
+
+            if(!user) {
+                throw new Error('Usuário não encontrado')
+            } 
+            
+            localStorage.setItem('GameList@user', JSON.stringify(user));
             window.location.replace('/')
         } catch (error) {
             toast({

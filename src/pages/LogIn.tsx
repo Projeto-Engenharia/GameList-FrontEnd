@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
     Box,
     Button,
@@ -17,11 +17,28 @@ import { Input } from '../components/InputAuth';
 import imgAuthHorizon from '../assets/HorizonImg.png';
 import LogoIcon from '../assets/LogoIcon.svg';
 import { AuthContext } from "../hooks/AuthHook";
+import api from "../api/api";
 
 type ISignIn = {
     nick: string;
     password: string;
 }
+
+interface IUser {
+    id: string,
+    nome: string,
+    senha: string,
+    games: [
+      {
+        id: string,
+        nome: string,
+        senha: string,
+        descricao: string,
+        avaliacao: 0,
+        image: string
+      }
+    ]
+  }
 
 const schema = yup.object({
     nick: yup.string().required(),
@@ -29,6 +46,8 @@ const schema = yup.object({
 }).required()
 
 export default function Auth() {
+
+    const [users, setUsers] = useState<IUser[]>([]);
 
     const { signIn } = useContext(AuthContext)
 
@@ -41,6 +60,7 @@ export default function Auth() {
     });
     const { errors } = formState;
     const handleSignIn: SubmitHandler<ISignIn> = async (data: ISignIn) => logIn(data);
+    
 
     return (
         <Flex w="100%" h="100vh" overflow="hidden" position="absolute">
