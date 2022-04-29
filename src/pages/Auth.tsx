@@ -120,8 +120,8 @@ export default function Auth() {
                         </Flex>
                     </Flex>
                     <Flex ml="20%" mt="6.5rem" direction="column">
-                        <Text fontWeight="bold" fontSize="4xl">Half-Life 2</Text>
-                        <Text fontSize="2xl" fontWeight="medium">“The right man in the wrong place can make all the difference in the world."</Text>
+                        <Text fontWeight="bold" fontSize="4xl">Gragas</Text>
+                        <Text fontSize="2xl" fontWeight="medium">"A bebida só é um problema quando a caneca está vazia"</Text>
                     </Flex>
                 </Flex>
             </Flex>

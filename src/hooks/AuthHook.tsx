@@ -13,27 +13,11 @@ type SignInData = {
 }
 
 type AuthContextType = {
-    user: User | undefined;
+    user: IUser;
     isAuthenticated: boolean;
     signIn: (data: SignInData) => Promise<void> ;
     signOut: () => Promise<void>;
 }
-
-interface IUser {
-    id: string,
-    nome: string,
-    senha: string,
-    games: [
-      {
-        id: string,
-        nome: string,
-        senha: string,
-        descricao: string,
-        avaliacao: 0,
-        image: string
-      }
-    ]
-  }
 
 export const AuthContext = createContext({} as AuthContextType)
 

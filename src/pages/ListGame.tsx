@@ -1,42 +1,80 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { Button, Flex, Text, TableContainer, Table, Thead, Tr, Th, Tbody, Td } from '@chakra-ui/react';
+import { useContext, useEffect, useState } from 'react';
+import { Flex, Text, Stack, Image, SimpleGrid, Spinner } from '@chakra-ui/react';
 import { AuthContext } from '../hooks/AuthHook';
 import api from '../api/api';
+import CardGame from '../components/Cardgame';
+import CardUser from '../components/CardUser';
+
+import LogoIcon from '../assets/LogoIcon.svg';
+import MenuUser from '../components/MenuUser';
+import CardGameUser from '../components/CardGameUser';
+import { useQuery } from 'react-query';
+
 
 export default function ListGame() {
-    const { signOut } = useContext(AuthContext)
+    const { user } = useContext(AuthContext)
 
-    const [listUser, setListUser] = useState<any[]>();
+    // const [user, setUser] = useState<IUser>();
+    const [games, setGames] = useState<any[]>([]);
 
-    useMemo(async() => {
-        const response = await api.get('/users/list');
-        return setListUser(response.data);
+    useEffect(() => {
+        const userStorage = localStorage.getItem("GameList@user")
+        if (!userStorage) {
+            throw new Error('Usuário não carregado')
+        }
     }, [])
 
-    return(
-        <Flex w="100%" direction="column">
-            <Text mb="10px">Usuários</Text>
-                <TableContainer>
-                    <Table variant='unstyled'>
-                        <Thead>
-                            <Tr>
-                                <Th>Nick</Th>
-                                <Th>Email</Th>
-                                <Th>Password</Th>
-                            </Tr>
-                        </Thead>
-                        <Tbody>
-                            {listUser?.map(user => (
-                            <Tr>
-                                <Td>{user.nick}</Td>
-                                <Td>{user.email}</Td>
-                                <Td>{user.password}</Td>
-                            </Tr>
-                            ))}
-                        </Tbody>
-                    </Table>
-                </TableContainer>
-            <Button w="100px" color="white" bgColor="red.400" _hover={{ bgColor: "red.600" }} onClick={signOut}>Logout</Button>
+
+        const myGames = useQuery('userGames', async() => {
+            try {
+                const response = await api.get(`/api/Users/${user?.id}`)
+                console.log(user.id);
+                setGames(response.data.games);
+            } catch (error) {
+                console.log(error);
+            }
+        });
+
+    return (
+        <Flex w="100%" direction="column" p="1.5rem" >
+            <Stack spacing={5}>
+                <Flex w="100%" h="4.5rem" align="center" p="10px" justify="space-between">
+                    <Image src={LogoIcon} w="7.5rem" h="2.5rem"/>
+                    <MenuUser key={user?.id} bio={user?.bio} games={user?.games} id={user?.id} nome={user?.nome} senha={user?.senha}   />
+                </Flex>
+                <Flex w="100%" direction="row" p="0.5rem" >
+                    <Flex  px="0.5rem" minWidth="80%" w="100%" h="100%" direction="column">
+                        <Stack spacing={8}>
+                            <Flex borderRadius="6.5rem" boxShadow="0px 0px 30px rgba(0, 0, 0, 0.7)" bg="pink" bgColor="gray.800" w="100%" h="4.5rem" justify="center" align="center">
+                                <Text>Games</Text>
+                            </Flex>
+                            <Flex w="100%" direction="row">
+                                <SimpleGrid w="100%" columns={[2, 4, 7]} spacing={4}>
+                                    {games.map(game => (
+                                        <CardGameUser
+                                        key={game.id} 
+                                        id={game.id}
+                                        nome={game.nome}
+                                        descricao={game.descricao}
+                                        avaliacao={game.avaliacao}
+                                        senha={game.senha}
+                                        image={game.image}
+                                        />
+                                    ))}
+                                </SimpleGrid>
+                            </Flex>
+                        </Stack>
+                    </Flex>
+                    <Flex px="0.5rem" w="100%" h="100%">
+                        <Flex minW="100%" w="100%">
+                            <CardUser  
+                                games={games}
+                                user={user}
+                            />
+                        </Flex>
+                    </Flex>
+                </Flex>
+            </Stack>
         </Flex>
     )
 }
