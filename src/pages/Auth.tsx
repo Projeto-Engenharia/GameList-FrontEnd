@@ -21,13 +21,11 @@ import api from "../api/api";
 
 type ISignIn = {
     nick: string;
-    email: string;
     password: string;
 }
 
 const schema = yup.object({
     nick: yup.string().required(),
-    email: yup.string().email().required(),
     password: yup.string().required()
 }).required()
 
@@ -38,7 +36,17 @@ export default function Auth() {
 
 
             try {
-                const response = await api.post('/createUser', data);
+
+                const user = {
+                    nome: data.nick,
+                    senha: data.password,
+                    bio: "Insira sua Bio aqui",
+                    games: [],
+                }
+
+
+                const response = await api.post('/api/Users', user);
+
                 return toast({
                     title: 'Account created.',
                     description: "We've created your account for you.",
@@ -103,12 +111,12 @@ export default function Auth() {
                                     defaultValue=""
                                     render={({ field }) => <Input label="Nick" icon={FiUser} error={errors.nick} {...field} />}
                                 />
-                                <Controller
+                                {/* <Controller
                                     name="email"
                                     control={control}
                                     defaultValue=""
                                     render={({ field }) => <Input label="Email" icon={FiMail} error={errors.email} {...field} />}
-                                />
+                                /> */}
                                 <Controller
                                     name="password"
                                     control={control}

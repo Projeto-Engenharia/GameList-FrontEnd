@@ -1,12 +1,16 @@
 import React from 'react';
 import {
     Flex,
+    HStack,
     Image,
     Text
 } from '@chakra-ui/react';
-import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Carousel } from 'react-responsive-carousel';
+
+import Carousel from 'nuka-carousel';
 import CardGame from '../Cardgame';
+import CardGameUser from '../CardGameUser';
+
+import "./index.css";
 
 interface ICardUser {
     games?: IGames[];
@@ -16,7 +20,7 @@ interface ICardUser {
 const CardUser = ({ games, user }: ICardUser) => {
 
     return (
-        <Flex borderRadius="2.5rem" boxShadow="0px 0px 30px rgba(0, 0, 0, 0.7)" w="100%" minH="45rem" direction="column" position="relative" >
+        <Flex borderRadius="2.5rem" boxShadow="0px 0px 30px rgba(0, 0, 0, 0.7)" maxW="22rem" w="100%" minH="45rem" direction="column" position="relative">
             <Flex
                 direction="column"
                 zIndex={1}
@@ -40,19 +44,21 @@ const CardUser = ({ games, user }: ICardUser) => {
                     </Flex>
                     <Flex direction="column" mt="0.5rem">
                         <Text fontWeight="bold" fontSize="large" color="gray.600">Jogos Favoritos</Text>
-                        {/* <Carousel axis='horizontal'>
+                           <Flex direction="row" mt="4" w="100%" overflowX="auto" className='scroll-bar' >
+                               <HStack spacing={8}>
                             {games?.map(game => (
-                                <CardGame
-                                    key={game.id}
-                                    id={game.id}
-                                    nome={game.nome}
-                                    descricao={game.descricao}
-                                    avaliacao={game.avaliacao}
-                                    senha={game.senha}
-                                    image={game.image}
-                                />
-                            ))}
-                        </Carousel> */}
+                                    <CardGameUser
+                                        key={game.id}
+                                        id={game.id}
+                                        nome={game.nome}
+                                        descricao={game.descricao}
+                                        avaliacao={game.avaliacao}
+                                        senha={game.senha}
+                                        image={game.image}
+                                    />
+                                ))}
+                                </HStack>
+                           </Flex>
                     </Flex>
                 </Flex>
             </Flex>

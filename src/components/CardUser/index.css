@@ -1,0 +1,10 @@
+.scroll-bar::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    background-color: #1A202C;
+}
+
+.scroll-bar::-webkit-scrollbar-thumb {
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 1);
+    border-radius: 5px;
+}
