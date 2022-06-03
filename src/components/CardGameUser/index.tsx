@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
     Badge,
     Button,
@@ -17,12 +17,20 @@ import {
 } from '@chakra-ui/react';
 import { url } from 'inspector';
 
-import { FiStar } from 'react-icons/fi'
+import { FiExternalLink, FiStar, FiX } from 'react-icons/fi'
+import { AuthContext } from '../../hooks/AuthHook';
+import api from '../../api/api';
 
+interface IGamesProps extends IGames {
+    favorites?: IGames[];
+}
 
-
-const CardGameUser = ( { id, nome, senha, descricao, avaliacao, image}: IGames) => {
+const CardGameUser = ( { id, nome, senha, descricao, avaliacao, image, desenvolvedora, favorites}: IGamesProps) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const { user } = useContext(AuthContext)
+    
+
+    
 
     return (
         <>
@@ -48,7 +56,18 @@ const CardGameUser = ( { id, nome, senha, descricao, avaliacao, image}: IGames) 
                 <ModalHeader>
                     <Flex align="center">
                         {nome} 
-                        <Icon fill="yellow.300" color="yellow.300" as={FiStar} ml="2"/>
+                        
+                        { favorites?.find(item => item.id === id) ?  <Icon color="yellow.300" fill="yellow.300"  as={FiStar} ml="2" onClick={async () => {
+                            await api.put(`/api/Users/${user.id}/removeFavorite/${id}`) 
+                            window.location.reload();
+                        }} /> 
+                        : 
+                        <Icon color="yellow.300"  as={FiStar} ml="2" 
+                        onClick={async () => {
+                            await api.put(`/api/Users/${user.id}/addFavorite/${id}`) 
+                            window.location.reload();
+                        }}
+                        /> }
                     </Flex>
                 </ModalHeader>
                 
@@ -63,9 +82,28 @@ const CardGameUser = ( { id, nome, senha, descricao, avaliacao, image}: IGames) 
                     </Flex>
                 </ModalBody>
                 <ModalFooter>
-                    Avaliação: &nbsp;
-                    <Flex bgColor="blue.500" p="3" borderRadius="10">
-                        {avaliacao}
+                    <Flex w="100%" align="center" justifyContent="space-between">
+                        <Flex>
+                            <Button color="blue.600" 
+                            onClick={() => {  
+                                    window.open(desenvolvedora, '_blank')
+                                }} >Desenvolvedora <Icon as={FiExternalLink} />
+                            </Button>
+                            <Flex ml="4" bgColor="red.600" p="3" borderRadius="10" _hover={{  
+                                backgroundColor: "red.400"
+                            }} onClick={async () => {
+                                await api.put(`/api/Users/${user.id}/removeGame/${id}`)
+                                window.location.reload();
+                            }}>
+                                <Icon  as={FiX} strokeWidth="3" stroke="red.900" />
+                            </Flex>
+                        </Flex>
+                        <Flex align="center">
+                            Avaliação: &nbsp;
+                            <Flex bgColor="blue.500" p="3" borderRadius="10">
+                                {avaliacao}
+                            </Flex> 
+                        </Flex>
                     </Flex>
                 </ModalFooter>
             </ModalContent>

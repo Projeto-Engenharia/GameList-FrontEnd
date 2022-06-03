@@ -18,10 +18,8 @@ import {
 } from '@chakra-ui/react';
 import { url } from 'inspector';
 
-import { FiStar } from 'react-icons/fi'
+import { FiStar, FiExternalLink } from 'react-icons/fi'
 import api from '../../api/api';
-import { stringify } from 'querystring';
-import { errorMonitor } from 'stream';
 import { AuthContext } from '../../hooks/AuthHook';
 
 interface IGameParams extends IGames {
@@ -29,7 +27,7 @@ interface IGameParams extends IGames {
 }
 
 
-const CardGame = ( { id, nome, senha, descricao, avaliacao, image, haveTheGame}: IGameParams) => {
+const CardGame = ( { id, nome, senha, descricao, avaliacao, image, haveTheGame, desenvolvedora}: IGameParams) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const { user } = useContext(AuthContext)
     const toast = useToast();
@@ -100,18 +98,25 @@ const CardGame = ( { id, nome, senha, descricao, avaliacao, image, haveTheGame}:
                     </Flex>
                 </ModalBody>
                 <ModalFooter>
-                    { !haveTheGame ? 
-                        <Button bgColor="yellow.300" mr="5" onClick={() => {getGameForMe(id)}}>
-                            <Icon as={FiStar} color="yellow.500"/>
-                        </Button> :
-                        <Button bgColor="gray.300" mr="5" disabled>
-                            <Icon as={FiStar} color="yellow.500" fill="yellow.500"/>
-                        </Button> 
-                    }
-                    Avaliação: &nbsp;
-                    <Flex bgColor="blue.500" p="3" borderRadius="10">
-                        {avaliacao}
-                    </Flex>
+                    <Flex w="100%" align="center" justifyContent="space-between">
+                        <Button color="blue.600" onClick={() => {  
+                            window.open(desenvolvedora, '_blank')
+                        }} >Desenvolvedora <Icon as={FiExternalLink} /></Button>
+                        <Flex align="center">
+                        { !haveTheGame ? 
+                            <Button bgColor="green.300" mr="5" onClick={() => {getGameForMe(id)}}>
+                                Adicionar
+                            </Button> :
+                            <Button bgColor="green.300" mr="5" disabled>
+                                Adicionar
+                            </Button> 
+                        }
+                            Avaliação: &nbsp;
+                            <Flex bgColor="blue.500" p="3" borderRadius="10">
+                                {avaliacao}
+                            </Flex>
+                        </Flex>
+                        </Flex>
                 </ModalFooter>
             </ModalContent>
         </Modal>

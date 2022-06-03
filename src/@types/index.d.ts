@@ -5,6 +5,7 @@ interface IGames {
     descricao: string;
     avaliacao: number;
     image: string;
+    desenvolvedora?: string;
 }
 
 interface IUser {
@@ -12,6 +13,7 @@ interface IUser {
     nome?: string,
     senha?: string,
     bio?: string,
+    favorites?: [any],
     games?: [
       {
         id: string,

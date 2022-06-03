@@ -75,6 +75,7 @@ export default function Games() {
                                             senha={game.senha}
                                             image={game.image}
                                             haveTheGame={alreadyHaveTheGame}
+                                            desenvolvedora={game.desenvolvedora}
                                         />
                                     )})}
                                 </SimpleGrid>

@@ -15,7 +15,12 @@ export default function ListGame() {
     const { user } = useContext(AuthContext)
 
     // const [user, setUser] = useState<IUser>();
+    
     const [games, setGames] = useState<any[]>([]);
+    const [favorites, setFavorites] = useState<any[]>([]);
+    const [bio, setNewBio] = useState<string>('');
+
+    console.log(games);
 
     useEffect(() => {
         const userStorage = localStorage.getItem("GameList@user")
@@ -28,8 +33,9 @@ export default function ListGame() {
         const myGames = useQuery('userGames', async() => {
             try {
                 const response = await api.get(`/api/Users/${user?.id}`)
-                console.log(user.id);
                 setGames(response.data.games);
+                setFavorites(response.data.favorites);
+                setNewBio(response.data.bio);
             } catch (error) {
                 console.log(error);
             }
@@ -40,7 +46,7 @@ export default function ListGame() {
             <Stack spacing={5}>
                 <Flex w="100%" h="4.5rem" align="center" p="10px" justify="space-between">
                     <Image src={LogoIcon} w="7.5rem" h="2.5rem"/>
-                    <MenuUser key={user?.id} bio={user?.bio} games={user?.games} id={user?.id} nome={user?.nome} senha={user?.senha}   />
+                    <MenuUser key={user?.id} bio={bio} games={user?.games} id={user?.id} nome={user?.nome} senha={user?.senha}   />
                 </Flex>
                 <Flex w="100%" direction="row" p="0.5rem" >
                     <Flex  px="0.5rem" minWidth="80%" w="100%" h="100%" direction="column">
@@ -59,6 +65,8 @@ export default function ListGame() {
                                         avaliacao={game.avaliacao}
                                         senha={game.senha}
                                         image={game.image}
+                                        desenvolvedora={game.desenvolvedora}
+                                        favorites={favorites}
                                         />
                                     ))}
                                 </SimpleGrid>
@@ -68,8 +76,9 @@ export default function ListGame() {
                     <Flex px="0.5rem" w="100%" h="100%">
                         <Flex minW="100%" w="100%">
                             <CardUser  
-                                games={games}
+                                bio={bio}
                                 user={user}
+                                favorites={favorites}
                             />
                         </Flex>
                     </Flex>

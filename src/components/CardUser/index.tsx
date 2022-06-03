@@ -1,23 +1,82 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
+    ButtonGroup,
+    Editable,
+    EditableInput,
+    EditablePreview,
     Flex,
     HStack,
+    Icon,
+    IconButton,
     Image,
-    Text
+    Input,
+    Text,
+    useEditableControls,
 } from '@chakra-ui/react';
 
-import Carousel from 'nuka-carousel';
-import CardGame from '../Cardgame';
+import { useQuery } from 'react-query';
+
 import CardGameUser from '../CardGameUser';
 
 import "./index.css";
+import { FiEdit, FiPenTool, FiSend, FiXCircle } from 'react-icons/fi';
+import api from '../../api/api';
 
 interface ICardUser {
-    games?: IGames[];
+    bio?: string;
     user?: IUser;
+    favorites?: IGames[];
 }
 
-const CardUser = ({ games, user }: ICardUser) => {
+const CardUser = ({ user, favorites }: ICardUser) => {
+
+    const [newBio, setNewBio] = useState<string>()
+
+    const [bio, setBio] = useState<string>('');
+
+    useEffect(() => {
+        const userStorage = localStorage.getItem("GameList@user")
+        if (!userStorage) {
+            throw new Error('Usuário não carregado')
+        }
+    }, [])
+
+
+        const newGames = useQuery('newGames', async() => {
+            try {
+                const response = await api.get(`/api/Users/${user?.id}`)
+                setBio(response.data.bio);
+            } catch (error) {
+                console.log(error);
+            }
+        });
+
+    async function newBioSend(value: string) {
+        const teste = await api.post(`/api/Users/${user?.id}/changeBio/${newBio}`)
+        window.location.reload();
+        return;
+    }
+
+    function EditableControls() {
+        const {
+          isEditing,
+          getSubmitButtonProps,
+          getCancelButtonProps,
+          getEditButtonProps,
+        } = useEditableControls()
+
+        return isEditing ? (
+            <Flex>
+                <Icon as={FiSend} {...getSubmitButtonProps()} />
+                <Icon as={FiXCircle} {...getCancelButtonProps()} />
+             </Flex>
+        ) : (
+            <Flex align="center">
+                <Text fontWeight="bold" fontSize="large" color="gray.600">Bio</Text>
+                <Icon ml="1" color="gray.300" as={FiEdit} {...getEditButtonProps()} />
+            </Flex>
+        ) 
+    }
 
     return (
         <Flex borderRadius="2.5rem" boxShadow="0px 0px 30px rgba(0, 0, 0, 0.7)" maxW="22rem" w="100%" minH="45rem" direction="column" position="relative">
@@ -39,14 +98,25 @@ const CardUser = ({ games, user }: ICardUser) => {
                         <Text fontWeight="bold" fontSize="xl" >{user?.nome}</Text>
                     </Flex>
                     <Flex direction="column" mt="0.5rem">
-                        <Text fontWeight="bold" fontSize="large" color="gray.600">Bio</Text>
-                        <Text fontWeight="medium" fontSize="medium" >{user?.bio ? user.bio : "Sem bibliografia"}</Text>
+                        <Editable onSubmit={(value) => {
+                            if(!value){
+                                return
+                            } else {
+                                newBioSend(value)
+                            }
+                        }}  onChange={(value) => {
+                            setNewBio(value)
+                        }}>
+                            <EditableControls />
+                            <Text>{bio}</Text>
+                            <Input as={EditableInput} />
+                        </Editable>
                     </Flex>
                     <Flex direction="column" mt="0.5rem">
                         <Text fontWeight="bold" fontSize="large" color="gray.600">Jogos Favoritos</Text>
                            <Flex direction="row" mt="4" w="100%" overflowX="auto" className='scroll-bar' >
                                <HStack spacing={8}>
-                            {games?.map(game => (
+                            {favorites?.map(game => (
                                     <CardGameUser
                                         key={game.id}
                                         id={game.id}
@@ -55,6 +125,7 @@ const CardUser = ({ games, user }: ICardUser) => {
                                         avaliacao={game.avaliacao}
                                         senha={game.senha}
                                         image={game.image}
+                                        favorites={favorites}
                                     />
                                 ))}
                                 </HStack>
